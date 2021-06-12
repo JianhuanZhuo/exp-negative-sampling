@@ -4,6 +4,7 @@ _key_:
   model: m
   optimizer/lr: lr
   DataLoader/batch_size: bs
+  optimizer/weight_decay: wd
 
 # 在 pipeline 中使用
 model: GMF

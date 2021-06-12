@@ -7,12 +7,12 @@ from itertools import product
 if __name__ == '__main__':
     # gpus = [0, 3, 1, 2]
     gpus = [0, 3, 1, 2]
-    process_pool = Pool(2 * len(gpus))
+    process_pool = Pool(3 * len(gpus))
     exp_config = config.load_specific_config("config.yaml")
 
     grid = {
-        # "nb": [64],  # nbatch 先用大批次加速训练，找到好的参数后再用小的吧
-        "optimizer/lr": [0.003],  # learning_rate
+        "nb": [1024, 256, 32],  # nbatch 先用大批次加速训练，找到好的参数后再用小的吧
+        "optimizer/lr": [0.01, 0.03, 0.1, 0.3],  # learning_rate
     }
 
     exp_config['log_folder'] = 'grid'

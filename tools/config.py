@@ -6,7 +6,7 @@ import time
 import yaml
 from git import Repo
 from git import cmd as gitCMD
-
+import copy
 
 class Config(dict):
     def __init__(self, *args, **kwargs):
@@ -98,6 +98,8 @@ class Config(dict):
         else:
             return default
 
+    def clone(self):
+        return copy.deepcopy(self)
 
 def load_config(path):
     """
@@ -151,11 +153,16 @@ def current_git_info():
 if __name__ == '__main__':
     # print(current_git_info())
     config = load_config('test.yaml')
-    print(config.json_str())
-    config['pipeline/dataset'] = 'TransE'
-    print(config.postfix(1))
-    print(config.get_or_default('model_args', default="Nothing"))
     # print(config.json_str())
+    # config['pipeline/dataset'] = 'TransE'
+    # print(config.postfix(1))
+    # print(config.get_or_default('model_args', default="Nothing"))
+    config['pipeline/dataset'] = 'TransE'
+    print(config['pipeline/dataset'])
+    a = config.clone()
+    config['pipeline/dataset'] = 'TransD'
+    print(config['pipeline/dataset'])
+    print(a['pipeline/dataset'])
     # def a(*, sd):
     #     print(sd)
     #

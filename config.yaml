@@ -1,6 +1,5 @@
 # 实验唯一标识串
 _key_:
-  dataset: d
   model: m
   optimizer/lr: lr
   DataLoader/batch_size: bs
@@ -9,7 +8,6 @@ _key_:
 # 在 pipeline 中使用
 model: GMF
 dim: 32
-dataset: 'WN18'
 log_folder: "exps"
 log_tag: "GMF"
 cuda: "3"

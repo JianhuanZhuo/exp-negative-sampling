@@ -19,7 +19,7 @@ class Evaluator:
         ], axis=1))
 
         assert self.user_input.shape == self.item_input.shape
-        self.stop_delay = config.get_or_default('evaluator_args/stop_delay', 3)
+        self.stop_delay = config.get_or_default('evaluator_args/stop_delay', 10)
         self.score_cache = []
 
     def evaluate(self, model, epoch):

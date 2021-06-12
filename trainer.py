@@ -80,22 +80,22 @@ def main_run(config):
 
     for epoch in range(config['epochs']):
         # 我们 propose 的模型训练
-        # epoch_loss = []
-        # for packs in tqdm(dataloader,
-        #                   desc=f'train  \tepoch: {epoch}/{config["epochs"]}',
-        #                   bar_format="{desc}{percentage:3.0f}%|{bar:10}{r_bar}",
-        #                   ):
-        #     optimizer.zero_grad()
-        #     model.train()
-        #     user, positive, negative = [p.cuda() for p in packs]
-        #     pos_score = model(user, positive)
-        #     neg_score = model(user, negative)
-        #     loss = F.relu(neg_score - pos_score + 1)
-        #
-        #     loss.sum().backward()
-        #     optimizer.step()
-        #     epoch_loss.append(loss)
-        # summary.add_scalar('Epoch/Loss', torch.stack(epoch_loss).mean().item(), global_step=epoch)
+        epoch_loss = []
+        for packs in tqdm(dataloader,
+                          desc=f'train  \tepoch: {epoch}/{config["epochs"]}',
+                          bar_format="{desc}{percentage:3.0f}%|{bar:10}{r_bar}",
+                          ):
+            optimizer.zero_grad()
+            model.train()
+            user, positive, negative = [p.cuda() for p in packs]
+            pos_score = model(user, positive)
+            neg_score = model(user, negative)
+            loss = F.relu(neg_score - pos_score + 1)
+
+            loss.sum().backward()
+            optimizer.step()
+            epoch_loss.append(loss)
+        summary.add_scalar('Epoch/Loss', torch.stack(epoch_loss).mean().item(), global_step=epoch)
 
         # 数据记录和精度验证
         if (epoch + 1) % config['evaluator_time'] == 0:

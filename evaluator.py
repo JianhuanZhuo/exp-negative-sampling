@@ -42,7 +42,7 @@ class Evaluator:
             self.summary.add_scalar('Eval/ndcg1', ndcg1, global_step=epoch)
             self.summary.add_scalar('Eval/ndcg3', ndcg3, global_step=epoch)
 
-            print(f"Eval: r1:{recall1.item():0.5}, r3:{recall3.item():0.5},n1:{ndcg1.item():0.5},n3:{ndcg3.item():0.5}")
+            print(f"Eval: r1:{recall1.item():0.4} r3:{recall3.item():0.4} n1:{ndcg1.item():0.4} n3:{ndcg3.item():0.4}")
 
 
 if __name__ == '__main__':

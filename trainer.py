@@ -108,6 +108,10 @@ def main_run(config):
                 os.path.join('%s' % config['writer_path'], f"checkpoint-{epoch}.tar")
             )
             evaluator.evaluate(model, epoch)
+            if evaluator.should_stop():
+                print("early stop...")
+                return
+
 
 
 if __name__ == '__main__':

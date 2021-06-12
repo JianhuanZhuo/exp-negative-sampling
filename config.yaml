@@ -13,6 +13,8 @@ log_tag: "GMF"
 cuda: "3"
 seed: "random"
 evaluator_time: 10
+evaluator_args:
+  stop_delay: 3
 epochs: 1000
 DataLoader:
   shuffle: True

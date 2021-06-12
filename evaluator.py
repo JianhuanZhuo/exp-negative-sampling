@@ -19,6 +19,8 @@ class Evaluator:
         ], axis=1))
 
         assert self.user_input.shape == self.item_input.shape
+        self.stop_delay = config.get_or_default('evaluator_args/stop_delay', 3)
+        self.score_cache = []
 
     def evaluate(self, model, epoch):
         # 失能验证
@@ -43,6 +45,13 @@ class Evaluator:
             self.summary.add_scalar('Eval/ndcg3', ndcg3, global_step=epoch)
 
             print(f"Eval: r1:{recall1.item():0.4} r3:{recall3.item():0.4} n1:{ndcg1.item():0.4} n3:{ndcg3.item():0.4}")
+
+            self.score_cache.append(ndcg.item())
+            if len(self.score_cache) > self.stop_delay:
+                self.score_cache.pop(0)
+
+    def should_stop(self):
+        return len(self.score_cache) == self.stop_delay and np.argmax(self.score_cache) == 0
 
 
 if __name__ == '__main__':

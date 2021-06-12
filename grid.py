@@ -13,7 +13,7 @@ if __name__ == '__main__':
     grid = {
         "DataLoader/batch_size": [1024],  # nbatch 先用大批次加速训练，找到好的参数后再用小的吧
         "optimizer/lr": [0.1, 0.3],  # learning_rate
-        "optimizer/weight_decay": [0, 0.1, 1, 10],  # learning_rate
+        "optimizer/weight_decay": [0, 0.1],  # learning_rate
     }
 
     exp_config['log_folder'] = 'grid'

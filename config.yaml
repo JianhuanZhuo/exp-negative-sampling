@@ -3,6 +3,7 @@ _key_:
   dataset: d
   model: m
   optimizer/lr: lr
+  DataLoader/batch_size: bs
 
 # 在 pipeline 中使用
 model: GMF

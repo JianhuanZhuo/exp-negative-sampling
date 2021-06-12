@@ -11,7 +11,7 @@ if __name__ == '__main__':
     exp_config = config.load_specific_config("config.yaml")
 
     grid = {
-        "nb": [1024, 256, 32],  # nbatch 先用大批次加速训练，找到好的参数后再用小的吧
+        "DataLoader/batch_size": [1024, 256, 32],  # nbatch 先用大批次加速训练，找到好的参数后再用小的吧
         "optimizer/lr": [0.01, 0.03, 0.1, 0.3],  # learning_rate
     }
 

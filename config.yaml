@@ -1,0 +1,26 @@
+# 实验唯一标识串
+_key_:
+  dataset: d
+  model: m
+  optimizer/lr: lr
+
+# 在 pipeline 中使用
+model: GMF
+dim: 32
+dataset: 'WN18'
+log_folder: "exps"
+log_tag: "original"
+cuda: "0"
+seed: "random"
+evaluator_time: 1
+epochs: 100
+DataLoader:
+  shuffle: True
+  batch_size: 32
+  drop_last: True
+  pin_memory: False
+optimizer:
+  lr: 0.01
+  weight_decay: 0
+# log as tee file
+logfile: False

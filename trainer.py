@@ -113,7 +113,6 @@ def main_run(config):
                 return
 
 
-
 if __name__ == '__main__':
     cfg = load_specific_config("config.yaml")
     if len(sys.argv) > 1:

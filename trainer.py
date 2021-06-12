@@ -14,7 +14,6 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from tqdm.auto import tqdm
 from torch.nn import functional as F
-from model.GNS import GNS
 from setproctitle import setproctitle
 
 
@@ -88,8 +87,11 @@ def main_run(config):
             optimizer.zero_grad()
             model.train()
             user, positive, negative = [p.cuda() for p in packs]
+            user = user.unsqueeze(dim=1)
             pos_score = model(user, positive)
             neg_score = model(user, negative)
+            pos_score = pos_score.unsqueeze(dim=1)
+            neg_score = neg_score.unsqueeze(dim=2)
             loss = F.relu(neg_score - pos_score + 1)
 
             loss.sum().backward()

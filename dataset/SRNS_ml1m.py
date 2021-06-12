@@ -16,6 +16,8 @@ class SRNSML1MDataset(Dataset):
         self.test_data = pickle.load(open(os.path.join(folder, 'test.pkl'), 'rb'))
         self.test_data_neg = pickle.load(open(os.path.join(folder, 'test_neg.pkl'), 'rb'))
 
+        self.size = config['sample_group_size']
+
         self.num_user = max(np.max(self.train_data[:, 0]), np.max(self.test_data[:, 0])) + 1
         self.num_item = max(np.max(self.train_data[:, 1]), np.max(self.test_data[:, 1])) + 1
 
@@ -23,15 +25,24 @@ class SRNSML1MDataset(Dataset):
         for u, i in self.train_data:
             self.uis[u].add(i)
 
+        self.ui_list = {
+            u: list(iss)
+            for u, iss in self.uis.items()
+        }
+
     def __len__(self):
         return len(self.train_data)
 
     def __getitem__(self, index):
         res = self.train_data[index]
-        user, pos = res[0], res[1]
+        user = res[0]
 
-        neg = np.random.randint(0, self.num_item)
-        while neg in self.uis[user]:
+        positives = random.choices(self.ui_list[user], k=self.size)
+        negatives = []
+        for _ in range(self.size):
             neg = np.random.randint(0, self.num_item)
+            while neg in self.uis[user]:
+                neg = np.random.randint(0, self.num_item)
+            negatives.append(neg)
 
-        return user, pos, neg
+        return torch.tensor(user), torch.tensor(positives), torch.tensor(negatives)

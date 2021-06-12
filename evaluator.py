@@ -28,13 +28,13 @@ class Evaluator:
             model.eval()
             sample_num = self.user_input.shape[0]
             score = model(self.user_input.reshape([-1]).cuda(), self.item_input.reshape([-1]).cuda())
-            score.reshape([sample_num, 101])
+            score = score.reshape([sample_num, 101])
             rank = score.argsort(1, descending=True).argsort(1)[:, 0]
             recall1 = (rank < 1).float().mean()
             recall3 = (rank < 3).float().mean()
             ndcg = math.log(2) / torch.log(rank + 2)
-            ndcg1 = torch.sum((rank < 1) * ndcg)
-            ndcg3 = torch.sum((rank < 1) * ndcg)
+            ndcg1 = torch.mean((rank < 1) * ndcg)
+            ndcg3 = torch.mean((rank < 3) * ndcg)
 
             self.summary.add_scalar('Eval/recall1', recall1, global_step=epoch)
             self.summary.add_scalar('Eval/recall3', recall3, global_step=epoch)
@@ -42,7 +42,7 @@ class Evaluator:
             self.summary.add_scalar('Eval/ndcg1', ndcg1, global_step=epoch)
             self.summary.add_scalar('Eval/ndcg3', ndcg3, global_step=epoch)
 
-            print(f"Eval: r1:{recall1.item()}, r3:{recall3.item()},n1:{ndcg1.item()},n3:{ndcg3.item()}")
+            print(f"Eval: r1:{recall1.item():0.5}, r3:{recall3.item():0.5},n1:{ndcg1.item():0.5},n3:{ndcg3.item():0.5}")
 
 
 if __name__ == '__main__':

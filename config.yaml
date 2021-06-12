@@ -9,11 +9,11 @@ model: GMF
 dim: 32
 dataset: 'WN18'
 log_folder: "exps"
-log_tag: "original"
-cuda: "0"
+log_tag: "GMF"
+cuda: "3"
 seed: "random"
-evaluator_time: 1
-epochs: 100
+evaluator_time: 10
+epochs: 1000
 DataLoader:
   shuffle: True
   batch_size: 32

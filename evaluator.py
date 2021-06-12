@@ -46,7 +46,7 @@ class Evaluator:
 
             print(f"Eval: r1:{recall1.item():0.4} r3:{recall3.item():0.4} n1:{ndcg1.item():0.4} n3:{ndcg3.item():0.4}")
 
-            self.score_cache.append(ndcg.item())
+            self.score_cache.append(torch.sum(ndcg).item())
             if len(self.score_cache) > self.stop_delay:
                 self.score_cache.pop(0)
 

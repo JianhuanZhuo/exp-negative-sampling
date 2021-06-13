@@ -96,7 +96,7 @@ def main_run(config):
 
             loss.sum().backward()
             optimizer.step()
-            epoch_loss.append(loss)
+            epoch_loss.append(loss.mean().item())
         summary.add_scalar('Epoch/Loss', torch.stack(epoch_loss).mean().item(), global_step=epoch)
 
         # 数据记录和精度验证

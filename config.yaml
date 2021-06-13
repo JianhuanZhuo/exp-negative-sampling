@@ -27,4 +27,4 @@ optimizer:
   lr: 0.3
   weight_decay: 0
 # log as tee file
-logfile: False
+logfile: True

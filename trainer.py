@@ -15,7 +15,7 @@ from torch.utils.tensorboard import SummaryWriter
 from tqdm.auto import tqdm
 from torch.nn import functional as F
 from setproctitle import setproctitle
-
+import numpy as np
 
 def wrap(config):
     pid = os.getpid()
@@ -97,7 +97,7 @@ def main_run(config):
             loss.sum().backward()
             optimizer.step()
             epoch_loss.append(loss.mean().item())
-        summary.add_scalar('Epoch/Loss', torch.stack(epoch_loss).mean().item(), global_step=epoch)
+        summary.add_scalar('Epoch/Loss', np.mean(epoch_loss), global_step=epoch)
 
         # 数据记录和精度验证
         if (epoch + 1) % config['evaluator_time'] == 0:

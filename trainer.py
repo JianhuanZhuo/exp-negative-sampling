@@ -93,16 +93,20 @@ def main_run(config):
             assert user.shape == torch.Size([batch_size, 1])
             assert positive.shape == torch.Size([batch_size, config["sample_group_size"]])
             assert negative.shape == torch.Size([batch_size, config["sample_group_size"]])
-            pos_score = model(user, positive)
-            neg_score = model(user, negative)
-            assert pos_score.shape == torch.Size([batch_size, config["sample_group_size"], 1])
+            pos_score = model(user, positive).squeeze(dim=2)
+            neg_score = model(user, negative).squeeze(dim=2)
+            assert pos_score.shape == torch.Size([batch_size, config["sample_group_size"]])
+            assert neg_score.shape == torch.Size([batch_size, config["sample_group_size"]])
+
+            pos_score = pos_score.unsqueeze(dim=1)
+            neg_score = neg_score.unsqueeze(dim=2)
+            assert pos_score.shape == torch.Size([batch_size, 1, config["sample_group_size"]])
             assert neg_score.shape == torch.Size([batch_size, config["sample_group_size"], 1])
 
-            pos_score = pos_score.squeeze(dim=2)
-            neg_score = neg_score.squeeze(dim=2).max(dim=1, keepdim=True)[0]
+            neg_score = neg_score.topk(dim=1, k=config['sample_top_size'])[0]
 
-            assert pos_score.shape == torch.Size([batch_size, config["sample_group_size"]])
-            assert neg_score.shape == torch.Size([batch_size, 1])
+            assert pos_score.shape == torch.Size([batch_size, 1, config["sample_group_size"]])
+            assert neg_score.shape == torch.Size([batch_size, config['sample_top_size'], 1])
 
             loss = F.relu(neg_score - pos_score + 1)
 

@@ -5,4 +5,6 @@ commit:fcf799b283084d8d575947059fc2d7845275c2ff
 后续：这个就可以做为 baseline 即可
 
 
+commit:13e0ca88ed35f75054d4c63092fd7a2bcc3315bc
+日志：/mnt/data/zhuojianhuan/projects/gns/gns/grid/GMF-13e0c
 方法：基于 GMF + 组的方式提高训练效率

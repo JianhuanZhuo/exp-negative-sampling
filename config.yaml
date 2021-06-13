@@ -17,10 +17,10 @@ evaluator_time: 10
 evaluator_args:
   stop_delay: 10
 epochs: 1000
-sample_group_size: 16
+sample_group_size: 32
 DataLoader:
   shuffle: True
-  batch_size: 256
+  batch_size: 1024
   drop_last: True
   pin_memory: False
 optimizer:

@@ -17,6 +17,7 @@ from torch.nn import functional as F
 from setproctitle import setproctitle
 import numpy as np
 
+
 def wrap(config):
     pid = os.getpid()
     config['pid'] = pid
@@ -87,11 +88,22 @@ def main_run(config):
             optimizer.zero_grad()
             model.train()
             user, positive, negative = [p.cuda() for p in packs]
+            batch_size = user.shape[0]
             user = user.unsqueeze(dim=1)
+            assert user.shape == torch.Size([batch_size, 1])
+            assert positive.shape == torch.Size([batch_size, config["sample_group_size"]])
+            assert negative.shape == torch.Size([batch_size, config["sample_group_size"]])
             pos_score = model(user, positive)
             neg_score = model(user, negative)
-            pos_score = pos_score.unsqueeze(dim=1)
-            neg_score = neg_score.unsqueeze(dim=2)
+            assert pos_score.shape == torch.Size([batch_size, config["sample_group_size"], 1])
+            assert neg_score.shape == torch.Size([batch_size, config["sample_group_size"], 1])
+
+            pos_score = pos_score.squeeze(dim=2)
+            neg_score = neg_score.squeeze(dim=2).max(dim=1, keepdim=True)[0]
+
+            assert pos_score.shape == torch.Size([batch_size, config["sample_group_size"]])
+            assert neg_score.shape == torch.Size([batch_size, 1])
+
             loss = F.relu(neg_score - pos_score + 1)
 
             loss.sum().backward()

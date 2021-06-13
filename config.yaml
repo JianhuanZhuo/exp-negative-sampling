@@ -5,6 +5,7 @@ _key_:
   DataLoader/batch_size: bs
 #  optimizer/weight_decay: wd
   sample_group_size: nss
+  sample_policy: nsp
 
 # 在 pipeline 中使用
 model: GMF
@@ -18,6 +19,7 @@ evaluator_args:
   stop_delay: 10
 epochs: 1000
 sample_group_size: 32
+sample_policy: Nmax
 DataLoader:
   shuffle: True
   batch_size: 1024

@@ -17,18 +17,18 @@ cuda: "3"
 seed: "random"
 evaluator_time: 3
 evaluator_args:
-  stop_delay: 10
+  stop_delay: 30
 epochs: 1000
 sample_group_size: 32
 sample_policy: Nmax
-sample_top_size: 32
+sample_top_size: 16
 DataLoader:
   shuffle: True
-  batch_size: 1024
+  batch_size: 2048
   drop_last: True
   pin_memory: False
 optimizer:
   lr: 0.3
-  weight_decay: 0
+  weight_decay: 9.6
 # log as tee file
 logfile: True

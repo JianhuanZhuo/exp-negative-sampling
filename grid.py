@@ -12,9 +12,10 @@ if __name__ == '__main__':
 
     grid = {
         "DataLoader/batch_size": [2048],  # nbatch 先用大批次加速训练，找到好的参数后再用小的吧
-        "optimizer/lr": [0.01, 0.03],  # learning_rate
-        "optimizer/weight_decay": [7.2, 9.6, 14.4, 19.2],  # learning_rate
-        "sample_group_size": [32]
+        "optimizer/lr": [0.03],  # learning_rate
+        "optimizer/weight_decay": [9.6],  # learning_rate
+        "sample_group_size": [32],
+        "sample_top_size": [1, 4, 8, 16],
     }
 
     exp_config['log_folder'] = 'grid'

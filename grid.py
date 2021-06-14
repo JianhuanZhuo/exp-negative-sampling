@@ -7,13 +7,13 @@ from itertools import product
 if __name__ == '__main__':
     # gpus = [0, 3, 1, 2]
     gpus = [0, 3, 1, 2]
-    process_pool = Pool(3 * len(gpus))
+    process_pool = Pool(4 * len(gpus))
     exp_config = config.load_specific_config("config.yaml")
 
     grid = {
-        "DataLoader/batch_size": [1024],  # nbatch 先用大批次加速训练，找到好的参数后再用小的吧
+        "DataLoader/batch_size": [2048],  # nbatch 先用大批次加速训练，找到好的参数后再用小的吧
         "optimizer/lr": [0.1, 0.3, 0.6],  # learning_rate
-        "optimizer/weight_decay": [0, 0.1, 0.3],  # learning_rate
+        "optimizer/weight_decay": [0, 0.1, 0.3, 0.6],  # learning_rate
         "sample_group_size": [32]
     }
 

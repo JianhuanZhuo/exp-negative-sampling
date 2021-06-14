@@ -3,7 +3,7 @@ _key_:
   model: m
   optimizer/lr: lr
   DataLoader/batch_size: bs
-#  optimizer/weight_decay: wd
+  optimizer/weight_decay: wd
   sample_group_size: nss
   sample_top_size: sts
   sample_policy: nsp
@@ -21,7 +21,7 @@ evaluator_args:
 epochs: 1000
 sample_group_size: 32
 sample_policy: Nmax
-sample_top_size: 16
+sample_top_size: 32
 DataLoader:
   shuffle: True
   batch_size: 1024

@@ -24,7 +24,7 @@ sample_policy: Nmax
 sample_top_size: 16
 DataLoader:
   shuffle: True
-  batch_size: 2048
+  batch_size: 1024
   drop_last: True
   pin_memory: False
 optimizer:

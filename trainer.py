@@ -24,12 +24,12 @@ def wrap(config):
     print(f"pid is {pid}")
 
     if 'writer_path' not in config:
-        subfolder = config['log_tag']
+        folder = config['log_tag']
         if config["git/state"] == "Good":
-            subfolder = '%s-%s' % (config['log_tag'], config['git']['hexsha'][:5])
+            folder += '-%s' % (config['git']['hexsha'][:5])
 
         config['writer_path'] = os.path.join(config['log_folder'],
-                                             subfolder,
+                                             folder,
                                              config.postfix()
                                              )
     if not os.path.exists(config['writer_path']):

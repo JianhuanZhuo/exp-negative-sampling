@@ -15,7 +15,7 @@ if __name__ == '__main__':
         "optimizer/lr": [0.03],  # learning_rate
         "optimizer/weight_decay": [9.6],  # learning_rate
         "sample_group_size": [32],
-        "sample_top_size": [1, 4, 8, 16],
+        "sample_top_size": [1, 4, 16, 32],
     }
 
     exp_config['log_folder'] = 'grid'

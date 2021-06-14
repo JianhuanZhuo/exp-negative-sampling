@@ -47,6 +47,7 @@ def wrap(config):
                 sys.stderr.write(str(e) + "\n")
     else:
         main_run(config)
+    exit(0)
 
 
 def main_run(config):

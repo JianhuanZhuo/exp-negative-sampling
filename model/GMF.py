@@ -1,5 +1,5 @@
 import torch
-from torch.nn import Module, Embedding, Linear
+from torch.nn import Module, Embedding, Linear, Dropout
 
 
 class GMF(Module):
@@ -9,9 +9,10 @@ class GMF(Module):
         self.user_embedding = Embedding(user_num, config['dim'])
         self.item_embedding = Embedding(item_num, config['dim'])
         self.beta = Linear(config['dim'], 1)
+        self.drop = Dropout(config['drop'])
 
     def forward(self, users, items):
-        users = self.user_embedding(users)
-        items = self.item_embedding(items)
+        users = self.drop(self.user_embedding(users))
+        items = self.drop(self.item_embedding(items))
         return self.beta(users * items)
 

@@ -8,6 +8,7 @@ _key_:
   sample_top_size: sts
   sample_policy: nsp
   drop: drop
+  loss/function: loss
 
 # 在 pipeline 中使用
 model: GMF

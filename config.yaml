@@ -12,7 +12,7 @@ _key_:
 # 在 pipeline 中使用
 model: GMF
 dim: 32
-drop: 0.5
+drop: 0.1
 log_folder: "exps"
 log_tag: "GMF"
 cuda: "3"
@@ -23,14 +23,16 @@ evaluator_args:
 epochs: 1000
 sample_group_size: 32
 sample_policy: Nmax
-sample_top_size: 16
+sample_top_size: 32
 DataLoader:
   shuffle: True
   batch_size: 2048
   drop_last: True
   pin_memory: False
 optimizer:
-  lr: 0.3
+  lr: 0.03
   weight_decay: 9.6
+loss:
+  function: logistic # relu / logistic
 # log as tee file
 logfile: True

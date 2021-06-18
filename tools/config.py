@@ -157,13 +157,21 @@ if __name__ == '__main__':
     # config['pipeline/dataset'] = 'TransE'
     # print(config.postfix(1))
     # print(config.get_or_default('model_args', default="Nothing"))
-    config['pipeline/dataset'] = 'TransE'
-    print(config['pipeline/dataset'])
-    a = config.clone()
-    config['pipeline/dataset'] = 'TransD'
-    print(config['pipeline/dataset'])
-    print(a['pipeline/dataset'])
+    # config['pipeline/dataset'] = 'TransE'
+    #
+    # print(config['pipeline/dataset'])
+    # a = config.clone()
+    # config['pipeline/dataset'] = 'TransD'
+    # print(config['pipeline/dataset'])
+    # print(a['pipeline/dataset'])
     # def a(*, sd):
     #     print(sd)
     #
     # a(123, 543, sd=3123)
+
+    print('pipeline' in config)
+    print('pipeline/No' in config)
+    print('pipeline/dataset' in config)
+    print('No/No' in config)
+    # print(config['pipeline/dataset'])
+    # print(config['pipeline/No'])

@@ -109,7 +109,11 @@ def main_run(config):
             assert pos_score.shape == torch.Size([batch_size, 1, config["sample_group_size"]])
             assert neg_score.shape == torch.Size([batch_size, config['sample_top_size'], 1])
 
-            loss = F.relu(neg_score - pos_score + 1)
+            margin = neg_score - pos_score + 1
+            if 'loss/function' in config and config['loss/function'] == 'logistic':
+                loss = torch.log(1+torch.exp(margin))
+            else:
+                loss = F.relu(margin)
 
             loss.sum().backward()
             optimizer.step()

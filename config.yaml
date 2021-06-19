@@ -21,7 +21,7 @@ cuda: "3"
 seed: "random"
 evaluator_time: 3
 evaluator_args:
-  stop_delay: 30
+  stop_delay: 300
 epochs: 10000
 sample_group_size: 32
 sample_policy: Nmax

@@ -134,7 +134,8 @@ def main_run(config):
             evaluator.evaluate(model, epoch)
             if evaluator.should_stop():
                 print("early stop...")
-                return
+                break
+    summary.close()
 
 
 if __name__ == '__main__':

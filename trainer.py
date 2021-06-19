@@ -127,6 +127,7 @@ def main_run(config):
                     "model_static_dict": model.state_dict(),
                     "optimizer_state_dict": optimizer.state_dict(),
                     "epoch": epoch,
+                    "config": config
                 },
                 os.path.join('%s' % config['writer_path'], f"checkpoint-{epoch}.tar")
             )

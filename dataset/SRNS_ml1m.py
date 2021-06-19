@@ -30,12 +30,19 @@ class SRNSML1MDataset(Dataset):
             for u, iss in self.uis.items()
         }
 
+        self.index_by_user = 'dataset/index_by_user' in config and config['dataset/index_by_user']
+
     def __len__(self):
-        return len(self.train_data)
+        if self.index_by_user:
+            return len(self.ui_list)
+        else:
+            return len(self.train_data)
 
     def __getitem__(self, index):
-        res = self.train_data[index]
-        user = res[0]
+        if self.index_by_user:
+            user = index
+        else:
+            user = self.train_data[index][0]
 
         positives = random.choices(self.ui_list[user], k=self.size)
         negatives = []

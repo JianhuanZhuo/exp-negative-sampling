@@ -9,6 +9,7 @@ _key_:
   sample_policy: nsp
   drop: drop
   loss/function: loss
+  dataset/index_by_user: ibu
 
 # 在 pipeline 中使用
 model: GMF
@@ -25,6 +26,8 @@ epochs: 1000
 sample_group_size: 32
 sample_policy: Nmax
 sample_top_size: 32
+dataset:
+  index_by_user: True
 DataLoader:
   shuffle: True
   batch_size: 2048

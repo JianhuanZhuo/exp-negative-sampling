@@ -26,7 +26,9 @@ class Config(dict):
         # set timestamp mask
         self['timestamp_mask'] = time.strftime("%m%d-%H%M%S", time.localtime())
         self['pid'] = os.getpid()
-        self['git'] = current_git_info()
+        if 'git_update' not in kwargs:
+            kwargs['git_update'] = True
+        self['git'] = current_git_info(kwargs['git_update'])
 
     def postfix(self, *args):
         posts = []
@@ -111,7 +113,7 @@ def load_config(path):
     raise Exception(f"config path exception: {path}")
 
 
-def load_specific_config(path, default_file_path="./config.yaml"):
+def load_specific_config(path, default_file_path="./config.yaml", git_update=True):
     if path.endswith("yaml") or path.endswith("yml"):
         if not os.path.exists(default_file_path):
             raise Exception(f"file is not exist : {os.path.abspath(default_file_path)}")
@@ -121,17 +123,18 @@ def load_specific_config(path, default_file_path="./config.yaml"):
             res = {}
             res.update(cm_config)
             res.update(sf_config)
-            return Config(**res)
+            return Config(**res, git_update=git_update)
     raise Exception(f"config path exception: {path}")
 
 
-def current_git_info():
+def current_git_info(git_update=True):
     try:
         g = gitCMD.Git(".")
-        print("git pull...")
-        state = g.pull()
-        print("git info:" + state)
-        assert state == 'Already up to date.', f"the result of git state: {state}"
+        if git_update:
+            print("git pull...")
+            state = g.pull()
+            print("git info:" + state)
+            assert state == 'Already up to date.', f"the result of git state: {state}"
         with Repo(".") as repo:
             t = repo.active_branch.commit.committed_date
             return {

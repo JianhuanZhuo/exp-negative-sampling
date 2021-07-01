@@ -26,6 +26,10 @@ epochs: 10000
 sample_group_size: 32
 sample_policy: Nmax
 sample_top_size: 32
+train:
+  epoch_tqdm: True
+  batch_tqdm: False
+  print_eval: False
 dataset:
   index_by_user: True
 DataLoader:

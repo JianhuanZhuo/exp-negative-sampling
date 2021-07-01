@@ -79,13 +79,22 @@ def main_run(config):
     # 优化器
     optimizer = Adagrad(model.parameters(), **config['optimizer'])
 
-    for epoch in range(config['epochs']):
+    epoch_loop = range(config['epochs'])
+    if config.get_or_default("train/epoch_tqdm", False):
+        epoch_loop = tqdm(epoch_loop,
+                          desc="train",
+                          bar_format="{desc}{percentage:3.0f}%|{bar:10}{r_bar}",
+                          )
+    for epoch in epoch_loop:
         # 我们 propose 的模型训练
         epoch_loss = []
-        for packs in tqdm(dataloader,
+        loader = dataloader
+        if config.get_or_default("train/batch_tqdm", True):
+            loader = tqdm(loader,
                           desc=f'train  \tepoch: {epoch}/{config["epochs"]}',
                           bar_format="{desc}{percentage:3.0f}%|{bar:10}{r_bar}",
-                          ):
+                          )
+        for packs in loader:
             optimizer.zero_grad()
             model.train()
             user, positive, negative = [p.cuda() for p in packs]
@@ -111,7 +120,7 @@ def main_run(config):
 
             margin = neg_score - pos_score + 1
             if 'loss/function' in config and config['loss/function'] == 'logistic':
-                loss = torch.log(1+torch.exp(margin))
+                loss = torch.log(1 + torch.exp(margin))
             else:
                 loss = F.relu(margin)
 

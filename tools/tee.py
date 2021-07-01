@@ -89,7 +89,9 @@ class Tee(object):
             self.fp = None
 
     def isatty(self):
-        return self.stream.isatty()
+        if self.stream:
+            return self.stream.isatty()
+        return False
 
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.filename)

@@ -18,7 +18,7 @@ drop: 0.1
 log_folder: "exps"
 log_tag: "GMF"
 cuda: "3"
-seed: "random"
+seed: 55
 evaluator_time: 3
 evaluator_args:
   stop_delay: 300
@@ -34,8 +34,8 @@ DataLoader:
   drop_last: True
   pin_memory: False
 optimizer:
-  lr: 0.03
-  weight_decay: 9.6
+  lr: 0.09
+  weight_decay: 4.8
 loss:
   function: logistic # relu / logistic
 # log as tee file

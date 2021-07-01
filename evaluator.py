@@ -52,7 +52,9 @@ class Evaluator:
                 self.score_cache.pop(0)
 
     def should_stop(self):
-        return len(self.score_cache) == self.stop_delay and np.argmax(self.score_cache) == 0
+        if self.config.get_or_default("evaluator_args/use_stop", False):
+            return len(self.score_cache) == self.stop_delay and np.argmax(self.score_cache) == 0
+        return False
 
 
 if __name__ == '__main__':

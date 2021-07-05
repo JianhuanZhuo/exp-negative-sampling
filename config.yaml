@@ -31,12 +31,13 @@ train:
   epoch_tqdm: True
   batch_tqdm: False
   print_eval: False
+  softw_enable: True
 dataset:
   index_by_user: True
 DataLoader:
-  shuffle: True
-  batch_size: 2048
-  drop_last: True
+  shuffle: False
+  batch_size: 6028
+  drop_last: False
   pin_memory: False
 optimizer:
   lr: 0.09

@@ -78,6 +78,8 @@ def main_run(config):
     evaluator = Evaluator(config, summary, dataset)
     # 优化器
     optimizer = Adagrad(model.parameters(), **config['optimizer'])
+    if config.get_or_default("train/softw_enable", False):
+        softw = torch.nn.Parameter(torch.ones([dataset.num_user, 1, 1])).cuda()
 
     epoch_loop = range(config['epochs'])
     if config.get_or_default("train/epoch_tqdm", False):
@@ -118,11 +120,18 @@ def main_run(config):
             assert pos_score.shape == torch.Size([batch_size, 1, config["sample_group_size"]])
             assert neg_score.shape == torch.Size([batch_size, config['sample_top_size'], 1])
 
-            margin = neg_score - pos_score + 1
+            if config.get_or_default("train/softw_enable", False):
+                margin = neg_score - pos_score + softw
+            else:
+                margin = neg_score - pos_score + 1
+
             if 'loss/function' in config and config['loss/function'] == 'logistic':
                 loss = torch.log(1 + torch.exp(margin))
             else:
                 loss = F.relu(margin)
+
+            if config.get_or_default("train/softw_enable", False):
+                loss += torch.exp(-softw)
 
             loss.sum().backward()
             optimizer.step()

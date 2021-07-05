@@ -43,6 +43,6 @@ optimizer:
   lr: 0.09
   weight_decay: 4.8
 loss:
-  function: logistic # relu / logistic
+  function: relu # relu / logistic
 # log as tee file
 logfile: True

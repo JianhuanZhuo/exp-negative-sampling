@@ -79,7 +79,8 @@ def main_run(config):
     # 优化器
     optimizer = Adagrad(model.parameters(), **config['optimizer'])
     if config.get_or_default("train/softw_enable", False):
-        softw = torch.nn.Parameter(torch.ones([dataset.num_user, 1, 1])).cuda()
+        softw = torch.nn.Parameter(torch.ones([dataset.num_user, 1, 1], requires_grad=True, device="cuda"))
+        optimizer = Adagrad([*model.parameters(), softw], **config['optimizer'])
 
     epoch_loop = range(config['epochs'])
     if config.get_or_default("train/epoch_tqdm", False):
@@ -144,6 +145,7 @@ def main_run(config):
                 {
                     "model_static_dict": model.state_dict(),
                     "optimizer_state_dict": optimizer.state_dict(),
+                    "softw": softw,
                     "epoch": epoch,
                     "config": config
                 },

@@ -56,6 +56,9 @@ class Evaluator:
             return len(self.score_cache) == self.stop_delay and np.argmax(self.score_cache) == 0
         return False
 
+    def record_softw(self, softw):
+        self.summary.add_histogram(softw)
+
 
 if __name__ == '__main__':
     pass

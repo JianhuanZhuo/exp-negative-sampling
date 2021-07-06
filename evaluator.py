@@ -32,20 +32,11 @@ class Evaluator:
             score = model(self.user_input.reshape([-1]).cuda(), self.item_input.reshape([-1]).cuda())
             score = score.reshape([sample_num, 101])
             rank = score.argsort(1, descending=True).argsort(1)[:, 0]
-            recall1 = (rank < 1).float().mean()
-            recall3 = (rank < 3).float().mean()
             ndcg = math.log(2) / torch.log(rank + 2)
-            ndcg1 = torch.mean((rank < 1) * ndcg)
-            ndcg3 = torch.mean((rank < 3) * ndcg)
-
-            self.summary.add_scalar('Eval/recall1', recall1, global_step=epoch)
-            self.summary.add_scalar('Eval/recall3', recall3, global_step=epoch)
-            self.summary.add_scalar('Eval/ndcg', torch.sum(ndcg), global_step=epoch)
-            self.summary.add_scalar('Eval/ndcg1', ndcg1, global_step=epoch)
-            self.summary.add_scalar('Eval/ndcg3', ndcg3, global_step=epoch)
-
-            if self.config.get_or_default("train/print_eval", False):
-                print(f"Eval: r1:{recall1.item():0.4} r3:{recall3.item():0.4} n1:{ndcg1.item():0.4} n3:{ndcg3.item():0.4}")
+            for k in [1, 3, 5, 10, 20, 99]:
+                recall = (rank < k).float().mean()
+                self.summary.add_scalar(f'Eval/recall{k}', recall, global_step=epoch)
+                self.summary.add_scalar(f'Eval/ndcg{k}', torch.mean((rank < k) * ndcg), global_step=epoch)
 
             self.score_cache.append(torch.sum(ndcg).item())
             if len(self.score_cache) > self.stop_delay:

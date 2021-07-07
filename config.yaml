@@ -10,8 +10,8 @@ _key_:
   drop: drop
   loss/function: loss
   dataset/index_by_user: ibu
-  dataset/noise: no
-  dataset/noise_p: nop
+  dataset/noise: noise
+  dataset/noise_p: noiseP
   train/softw_enable: stw
 
 # 在 pipeline 中使用
@@ -25,7 +25,7 @@ seed: "random"
 evaluator_time: 10
 evaluator_args:
   stop_delay: 300
-  use_stop: False
+  use_stop: True
 epochs: 10000
 sample_group_size: 32
 sample_policy: Nmax
@@ -41,13 +41,13 @@ dataset:
   noise_p: 0.05
 DataLoader:
   shuffle: False
-  batch_size: 6028
+  batch_size: 1024
   drop_last: False
   pin_memory: False
 optimizer:
   lr: 0.09
   weight_decay: 4.8
 loss:
-  function: relu # relu / logistic
+  function: logistic # relu / logistic
 # log as tee file
 logfile: True

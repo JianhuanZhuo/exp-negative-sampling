@@ -101,9 +101,9 @@ def main_run(config):
         for packs in loader:
             optimizer.zero_grad()
             model.train()
-            user, positive, negative = [p.cuda() for p in packs]
-            batch_size = user.shape[0]
-            user = user.unsqueeze(dim=1)
+            user_raw, positive, negative = [p.cuda() for p in packs]
+            batch_size = user_raw.shape[0]
+            user = user_raw.unsqueeze(dim=1)
             assert user.shape == torch.Size([batch_size, 1])
             assert positive.shape == torch.Size([batch_size, config["sample_group_size"]])
             assert negative.shape == torch.Size([batch_size, config["sample_group_size"]])
@@ -123,7 +123,7 @@ def main_run(config):
             assert neg_score.shape == torch.Size([batch_size, config['sample_top_size'], 1])
 
             if config.get_or_default("train/softw_enable", False):
-                margin = neg_score - pos_score + softw
+                margin = neg_score - pos_score + softw[user_raw]
             else:
                 margin = neg_score - pos_score + 1
 
@@ -133,7 +133,7 @@ def main_run(config):
                 loss = F.relu(margin)
 
             if config.get_or_default("train/softw_enable", False):
-                loss += torch.exp(-softw)
+                loss += torch.exp(-softw[user_raw])
 
             loss.sum().backward()
             optimizer.step()

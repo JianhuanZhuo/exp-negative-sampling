@@ -33,7 +33,7 @@ class Evaluator:
             score = score.reshape([sample_num, 101])
             rank = score.argsort(1, descending=True).argsort(1)[:, 0]
             ndcg = math.log(2) / torch.log(rank + 2)
-            for k in [1, 3, 5, 10, 20, 99]:
+            for k in [1, 3, 5, 10, 20]:
                 recall = (rank < k).float().mean()
                 self.summary.add_scalar(f'Eval/recall{k}', recall, global_step=epoch)
                 self.summary.add_scalar(f'Eval/ndcg{k}', torch.mean((rank < k) * ndcg), global_step=epoch)

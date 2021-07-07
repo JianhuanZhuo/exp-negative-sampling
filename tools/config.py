@@ -30,6 +30,12 @@ class Config(dict):
             kwargs['git_update'] = True
         self['git'] = current_git_info(kwargs['git_update'])
 
+    def random_again(self):
+        self['seed_before'] = self['seed']
+        self['seed'] = random.randint(0, 100)
+        self['random_seed'] = self['seed']
+
+
     def postfix(self, *args):
         posts = []
         for k, short in sorted(self['_key_'].items()):

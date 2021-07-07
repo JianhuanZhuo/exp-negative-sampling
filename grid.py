@@ -30,6 +30,7 @@ if __name__ == '__main__':
             exp_config['cuda'] = str(gpus[i % len(gpus)])
             print(f"{i:4} {exp_config.postfix()}")
             process_pool.apply_async(wrap, args=(exp_config.clone(),))
+        exp_config.random_again()
 
     process_pool.close()
     process_pool.join()

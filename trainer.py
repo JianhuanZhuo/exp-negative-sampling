@@ -153,7 +153,8 @@ def main_run(config):
                 os.path.join('%s' % config['writer_path'], f"checkpoint-{epoch}.tar")
             )
             evaluator.evaluate(model, epoch)
-            evaluator.record_softw(softw, epoch)
+            if config.get_or_default("train/softw_enable", False):
+                evaluator.record_softw(softw, epoch)
             if evaluator.should_stop():
                 print("early stop...")
                 break

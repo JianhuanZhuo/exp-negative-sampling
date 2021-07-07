@@ -142,16 +142,19 @@ def main_run(config):
 
         # 数据记录和精度验证
         if (epoch + 1) % config['evaluator_time'] == 0:
+            save_dict = {
+                "model_static_dict": model.state_dict(),
+                "optimizer_state_dict": optimizer.state_dict(),
+                "epoch": epoch,
+                "config": config
+            }
+            if config.get_or_default("train/softw_enable", False):
+                save_dict["softw"] = softw
             torch.save(
-                {
-                    "model_static_dict": model.state_dict(),
-                    "optimizer_state_dict": optimizer.state_dict(),
-                    "softw": softw,
-                    "epoch": epoch,
-                    "config": config
-                },
+                save_dict,
                 os.path.join('%s' % config['writer_path'], f"checkpoint-{epoch}.tar")
             )
+
             evaluator.evaluate(model, epoch)
             if config.get_or_default("train/softw_enable", False):
                 evaluator.record_softw(softw, epoch)

@@ -5,9 +5,8 @@ from trainer import wrap
 from itertools import product
 
 if __name__ == '__main__':
-    # gpus = [0, 3]
-    gpus = [0, 3, 1, 2]
-    process_pool = Pool(6 * len(gpus))
+    gpus = [0, 3, 1, 2] * 6 + [0, 3] * 6
+    process_pool = Pool(len(gpus))
     exp_config = config.load_specific_config("config.yaml")
 
     grid = {
@@ -17,20 +16,20 @@ if __name__ == '__main__':
         # "sample_group_size": [32],
         # "sample_top_size": [32],
         # "drop": [0.1],
-        "dataset/noise_p": [0.05, 0.1, 0.15],
+        # "dataset/noise_p": [0.05, 0.1, 0.15],
         "dataset/noise": [True, False],
         "train/softw_enable": [True, False],
         "loss/function": ["relu", "logistic"],
     }
 
+    repeat = 2
     exp_config['log_folder'] = 'grid'
-    for _ in range(3):
+    for r in range(repeat):
         for i, setting in enumerate(product(*list(grid.values()))):
             print(setting)
             for idx, k in enumerate(grid.keys()):
                 exp_config[k] = setting[idx]
-            exp_config['cuda'] = str(gpus[i % len(gpus)])
-            print(f"{i:4} {exp_config.postfix()}")
+            exp_config['cuda'] = str(gpus[(r * repeat + i) % len(gpus)])
             process_pool.apply_async(wrap, args=(exp_config.clone(),))
         exp_config.random_again()
 

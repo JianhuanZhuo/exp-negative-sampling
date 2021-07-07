@@ -10,6 +10,9 @@ _key_:
   drop: drop
   loss/function: loss
   dataset/index_by_user: ibu
+  dataset/noise: no
+  dataset/noise_p: nop
+  train/softw_enable: stw
 
 # 在 pipeline 中使用
 model: GMF
@@ -18,8 +21,8 @@ drop: 0.1
 log_folder: "exps"
 log_tag: "GMF"
 cuda: "3"
-seed: 55
-evaluator_time: 3
+seed: "random"
+evaluator_time: 10
 evaluator_args:
   stop_delay: 300
   use_stop: False
@@ -34,6 +37,8 @@ train:
   softw_enable: True
 dataset:
   index_by_user: True
+  noise: True
+  noise_p: 0.05
 DataLoader:
   shuffle: False
   batch_size: 6028

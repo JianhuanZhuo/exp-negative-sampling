@@ -48,7 +48,7 @@ class SRNSML1MDataset(Dataset):
 
         if self.config.get_or_default("dataset/noise", False):
             nop = self.config.get_or_default("dataset/noise_p")
-            neg_n = max(1, nop*self.size)
+            neg_n = int(max(1, nop*self.size))
             pos_n = self.size - neg_n
             positives = random.choices(self.ui_list[user], k=pos_n)
             for _ in range(neg_n):

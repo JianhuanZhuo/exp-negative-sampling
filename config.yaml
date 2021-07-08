@@ -34,7 +34,7 @@ train:
   epoch_tqdm: True
   batch_tqdm: False
   print_eval: False
-  softw_enable: True
+  softw_enable: False
 dataset:
   index_by_user: True
   noise: True

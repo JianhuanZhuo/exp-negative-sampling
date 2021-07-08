@@ -26,6 +26,7 @@ evaluator_time: 10
 evaluator_args:
   stop_delay: 300
   use_stop: True
+  eval_xs: [1, 3]
 epochs: 10000
 sample_group_size: 32
 sample_policy: Nmax
@@ -48,6 +49,6 @@ optimizer:
   lr: 0.09
   weight_decay: 4.8
 loss:
-  function: logistic # relu / logistic
+  function: relu # relu / logistic
 # log as tee file
 logfile: True

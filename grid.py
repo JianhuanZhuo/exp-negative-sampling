@@ -10,19 +10,19 @@ if __name__ == '__main__':
     exp_config = config.load_specific_config("config.yaml")
 
     grid = {
-        "loss/function": ["relu", "logistic"],
+        # "loss/function": ["relu", "logistic"],
         # "DataLoader/batch_size": [2048],  # nbatch 先用大批次加速训练，找到好的参数后再用小的吧
         # "sample_group_size": [32],
         # "sample_top_size": [32],
         # "drop": [0.1],
         # "train/softw_enable": [True, False],
-        "dataset/noise_p": [0.05, 0.1, 0.15],
+        "dataset/noise_p": [0, 0.05, 0.1, 0.15],
         # "dataset/noise": [True, False],
-        "optimizer/weight_decay": [4.8, 9.6, 12.9],  # learning_rate
-        "optimizer/lr": [0.9, 0.12, 0.3],  # learning_rate
+        "optimizer/weight_decay": [2.4, 4.8, 9.6],  # learning_rate
+        "optimizer/lr": [0.09, 0.12, 0.3],  # learning_rate
     }
 
-    repeat = 1
+    repeat = 3
     exp_config['log_folder'] = 'grid'
     task = 0
     exp_config['grid_spec/total'] = repeat * len(list(product(*list(grid.values()))))

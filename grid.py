@@ -24,12 +24,15 @@ if __name__ == '__main__':
 
     repeat = 1
     exp_config['log_folder'] = 'grid'
+    task = 0
     for r in range(repeat):
         for i, setting in enumerate(product(*list(grid.values()))):
             print(setting)
             for idx, k in enumerate(grid.keys()):
                 exp_config[k] = setting[idx]
             exp_config['cuda'] = str(gpus[(r * repeat + i) % len(gpus)])
+            task += 1
+            exp_config['']
             process_pool.apply_async(wrap, args=(exp_config.clone(),))
         exp_config.random_again()
 

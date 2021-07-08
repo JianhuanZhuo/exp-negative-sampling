@@ -22,6 +22,10 @@ def wrap(config):
     pid = os.getpid()
     config['pid'] = pid
     print(f"pid is {pid}")
+    if "grid_spec" in config:
+        total = config.get_or_default("grid_spec/total", -1)
+        current = config.get_or_default("grid_spec/current", -1)
+        print(f"grid spec: {current}/{total}")
 
     if 'writer_path' not in config:
         folder = config['log_tag']

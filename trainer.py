@@ -22,10 +22,12 @@ def wrap(config):
     pid = os.getpid()
     config['pid'] = pid
     print(f"pid is {pid}")
+    grid_spec = ""
     if "grid_spec" in config:
         total = config.get_or_default("grid_spec/total", -1)
         current = config.get_or_default("grid_spec/current", -1)
-        print(f"grid spec: {current}/{total}")
+        print(f"grid spec: {current:02}/{total:02}")
+        grid_spec = f"{current:02}/{total:02} "
 
     if 'writer_path' not in config:
         folder = config['log_tag']
@@ -39,7 +41,7 @@ def wrap(config):
     if not os.path.exists(config['writer_path']):
         os.makedirs(config['writer_path'])
 
-    setproctitle(config['writer_path'])
+    setproctitle(grid_spec + config['writer_path'])
 
     if 'logfile' not in config or config['logfile']:
         logfile_std = os.path.join(config['writer_path'], "std.log")

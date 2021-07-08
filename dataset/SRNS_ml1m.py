@@ -22,8 +22,15 @@ class SRNSML1MDataset(Dataset):
         self.num_item = max(np.max(self.train_data[:, 1]), np.max(self.test_data[:, 1])) + 1
 
         self.uis = defaultdict(set)
+        self.all_items = set()
         for u, i in self.train_data:
             self.uis[u].add(i)
+            self.all_items.add(i)
+
+        self.u_negs = {
+            u: list(self.all_items - iss)
+            for u, iss in self.uis.items()
+        }
 
         self.ui_list = {
             u: list(iss)
@@ -44,24 +51,27 @@ class SRNSML1MDataset(Dataset):
         else:
             user = self.train_data[index][0]
 
-        positives = random.choices(self.ui_list[user], k=self.size)
-
         if self.config.get_or_default("dataset/noise", False):
             nop = self.config.get_or_default("dataset/noise_p")
             neg_n = int(max(1, nop*self.size))
             pos_n = self.size - neg_n
-            positives = random.choices(self.ui_list[user], k=pos_n)
-            for _ in range(neg_n):
-                neg = np.random.randint(0, self.num_item)
-                while neg in self.uis[user]:
-                    neg = np.random.randint(0, self.num_item)
-                positives.append(neg)
+            # positives = random.choices(self.ui_list[user], k=pos_n)
+            # for _ in range(neg_n):
+            #     neg = np.random.randint(0, self.num_item)
+            #     while neg in self.uis[user]:
+            #         neg = np.random.randint(0, self.num_item)
+            #     positives.append(neg)
+            positives = random.choices(self.ui_list[user], k=pos_n) + random.choices(self.u_negs[user], k=neg_n)
+            random.shuffle(positives)
+        else:
+            positives = random.choices(self.ui_list[user], k=self.size)
 
-        negatives = []
-        for _ in range(self.size):
-            neg = np.random.randint(0, self.num_item)
-            while neg in self.uis[user]:
-                neg = np.random.randint(0, self.num_item)
-            negatives.append(neg)
+        # negatives = []
+        # for _ in range(self.size):
+        #     neg = np.random.randint(0, self.num_item)
+        #     while neg in self.uis[user]:
+        #         neg = np.random.randint(0, self.num_item)
+        #     negatives.append(neg)
+        negatives = random.choices(self.u_negs[user], k=self.size)
 
         return torch.tensor(user), torch.tensor(positives), torch.tensor(negatives)

@@ -25,7 +25,7 @@ if __name__ == '__main__':
     repeat = 1
     exp_config['log_folder'] = 'grid'
     task = 0
-    exp_config['grid_spec/total'] = repeat * len(product(*list(grid.values())))
+    exp_config['grid_spec/total'] = repeat * len(list(product(*list(grid.values()))))
     for r in range(repeat):
         for i, setting in enumerate(product(*list(grid.values()))):
             print(setting)

@@ -29,6 +29,8 @@ evaluator_args:
   eval_xs: [1, 3]
 epochs: 10000
 sample_group_size: 32
+sample_group_size_pos: 32
+sample_group_size_neg: 32
 sample_policy: Nmax
 sample_top_size: 32
 train:

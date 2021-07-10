@@ -43,7 +43,32 @@ class SRNSML1MDataset(Dataset):
 
         self.index_by_user = config.get_or_default('dataset/index_by_user', False)
 
-        self.ui_loss_record = torch.ones([self.num_user, self.num_item]) * 100
+        self.ui_loss = torch.ones([self.num_user, self.num_item]) * 100
+        self.ui_ig = torch.zeros([self.num_user, self.num_item])
+        self.ig_alpha = config.get_or_default("sample_ig/alpha", 0.0)
+
+    def update_un(self, user_raw, negative, un_loss):
+        batch_size, negative_size = negative.shape
+        assert un_loss.shape == torch.Size([batch_size, negative_size])
+        assert user_raw.shape == torch.Size([batch_size])
+
+        try:
+            for i, (u, ns, xn_loss) in enumerate(zip(user_raw, negative, un_loss)):
+                xi_loss = self.ui_loss[u][ns.long()]
+                assert xn_loss.shape == xi_loss.shape
+                un_ig = (xi_loss - xn_loss) / xn_loss
+                self.ui_ig[u][ns.long()] = self.ig_alpha * self.ui_ig[u][ns.long()] + (1-self.ig_alpha) * un_ig
+                self.ui_loss[u][ns.long()] = xn_loss
+                pass
+        except Exception as e:
+            print(e)
+            pass
+
+        # ui_loss = self.ui_loss[user_raw]
+        # assert un_loss.shape == ui_loss.shape
+        # un_ig = (un_loss - ui_loss) / un_loss
+        # self.ui_ig[user_raw] = self.ig_alpha * self.ui_ig[user_raw] + (1-self.ig_alpha) * un_ig
+        # self.ui_loss[user_raw] = un_loss
 
     def __len__(self):
         if self.index_by_user:
@@ -66,6 +91,13 @@ class SRNSML1MDataset(Dataset):
         else:
             positives = random.choices(self.ui_list[user], k=self.size_pos)
 
-        negatives = random.choices(self.u_negs[user], k=self.size_neg)
+        if self.config.get_or_default("sample_ig/enable", False):
+            caches = torch.tensor(random.choices(self.u_negs[user], k=self.size_neg * 2))
+            uig = self.ui_ig[torch.tensor(user, dtype=torch.long)]
+            caches_ig = uig[caches.long()]  #
+            _, idx = caches_ig.topk(self.size_neg)
+            negatives = caches[idx.long()]
+        else:
+            negatives = torch.tensor(random.choices(self.u_negs[user], k=self.size_neg))
 
-        return torch.tensor(user), torch.tensor(positives), torch.tensor(negatives)
+        return torch.tensor(user), torch.tensor(positives), negatives

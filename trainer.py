@@ -57,6 +57,34 @@ def wrap(config):
     return
 
 
+def distance(config, model, user, positive, negative, weight):
+    batch_size = user.shape[0]
+    assert user.shape == torch.Size([batch_size, 1])
+    assert positive.shape == torch.Size([batch_size, config["sample_group_size"]])
+    assert negative.shape == torch.Size([batch_size, config["sample_group_size"]])
+    pos_score = model(user, positive).squeeze(dim=2)
+    neg_score = model(user, negative).squeeze(dim=2)
+    assert pos_score.shape == torch.Size([batch_size, config["sample_group_size"]])
+    assert neg_score.shape == torch.Size([batch_size, config["sample_group_size"]])
+
+    pos_score = pos_score.unsqueeze(dim=1)
+    neg_score = neg_score.unsqueeze(dim=2)
+    assert pos_score.shape == torch.Size([batch_size, 1, config["sample_group_size"]])
+    assert neg_score.shape == torch.Size([batch_size, config["sample_group_size"], 1])
+
+    neg_score = neg_score.topk(dim=1, k=config['sample_top_size'])[0]
+
+    assert pos_score.shape == torch.Size([batch_size, 1, config["sample_group_size"]])
+    assert neg_score.shape == torch.Size([batch_size, config['sample_top_size'], 1])
+
+    margin = neg_score - pos_score + weight
+
+    if 'loss/function' in config and config['loss/function'] == 'logistic':
+        loss = torch.log(1 + torch.exp(margin))
+    else:
+        loss = F.relu(margin)
+    return loss
+
 def main_run(config):
     # set random seed
     os.environ['CUDA_DEVICE_ORDER'] = "PCI_BUS_ID"
@@ -110,40 +138,30 @@ def main_run(config):
             user_raw, positive, negative = [p.cuda() for p in packs]
             batch_size = user_raw.shape[0]
             user = user_raw.unsqueeze(dim=1)
-            assert user.shape == torch.Size([batch_size, 1])
-            assert positive.shape == torch.Size([batch_size, config["sample_group_size"]])
-            assert negative.shape == torch.Size([batch_size, config["sample_group_size"]])
-            pos_score = model(user, positive).squeeze(dim=2)
-            neg_score = model(user, negative).squeeze(dim=2)
-            assert pos_score.shape == torch.Size([batch_size, config["sample_group_size"]])
-            assert neg_score.shape == torch.Size([batch_size, config["sample_group_size"]])
+            weight = 1
+            if config.get_or_default("train/softw_enable", False):
+                weight = softw[user_raw]
 
-            pos_score = pos_score.unsqueeze(dim=1)
-            neg_score = neg_score.unsqueeze(dim=2)
-            assert pos_score.shape == torch.Size([batch_size, 1, config["sample_group_size"]])
-            assert neg_score.shape == torch.Size([batch_size, config["sample_group_size"], 1])
-
-            neg_score = neg_score.topk(dim=1, k=config['sample_top_size'])[0]
-
-            assert pos_score.shape == torch.Size([batch_size, 1, config["sample_group_size"]])
-            assert neg_score.shape == torch.Size([batch_size, config['sample_top_size'], 1])
+            loss = dist = distance(config, model, user, positive, negative, weight)
 
             if config.get_or_default("train/softw_enable", False):
-                margin = neg_score - pos_score + softw[user_raw]
-            else:
-                margin = neg_score - pos_score + 1
-
-            if 'loss/function' in config and config['loss/function'] == 'logistic':
-                loss = torch.log(1 + torch.exp(margin))
-            else:
-                loss = F.relu(margin)
-
-            if config.get_or_default("train/softw_enable", False):
-                loss += torch.exp(-softw[user_raw])
+                loss = dist + torch.exp(-softw[user_raw])
 
             loss.sum().backward()
             optimizer.step()
             epoch_loss.append(loss.mean().item())
+
+            if config.get_or_default("sample_ig/enable", False):
+                un_loss = dist.cpu().detach().mean(dim=2)
+
+                if config.get_or_default("sample_ig/post_un_loss", False):
+                    with torch.no_grad():
+                        model.eval()
+                        un_loss = distance(config, model, user, positive, negative, weight).cpu().detach().mean(dim=2)
+
+                assert un_loss.shape == torch.Size([batch_size, config['sample_top_size']])
+                dataset.update_un(user_raw.cpu().detach(), negative.cpu().detach(), un_loss)
+
         summary.add_scalar('Epoch/Loss', np.mean(epoch_loss), global_step=epoch)
 
         # 数据记录和精度验证

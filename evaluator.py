@@ -52,6 +52,12 @@ class Evaluator:
     def record_softw(self, softw, epoch):
         self.summary.add_histogram('Analysis/softw', softw, global_step=epoch)
 
+    def record_ig(self, dataset, epoch):
+        self.summary.add_histogram('Analysis/ui_user', dataset.ui_loss.mean(dim=1), global_step=epoch)
+        self.summary.add_histogram('Analysis/ui_item', dataset.ui_loss.mean(dim=0), global_step=epoch)
+        self.summary.add_histogram('Analysis/ig_user', dataset.ui_ig.mean(dim=1), global_step=epoch)
+        self.summary.add_histogram('Analysis/ig_item', dataset.ui_ig.mean(dim=0), global_step=epoch)
+
 
 if __name__ == '__main__':
     pass

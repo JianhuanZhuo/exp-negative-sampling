@@ -36,7 +36,7 @@ sample_group_size_neg: 32
 sample_policy: Nmax
 sample_top_size: 32
 sample_ig:
-  enable: True
+  enable: False
   alpha: 0.0
   post_un_loss: True
   cache_times: 2

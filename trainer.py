@@ -182,6 +182,8 @@ def main_run(config):
             evaluator.evaluate(model, epoch)
             if config.get_or_default("train/softw_enable", False):
                 evaluator.record_softw(softw, epoch)
+            if config.get_or_default("sample_ig/enable", False):
+                evaluator.record_ig(dataset, epoch)
             if evaluator.should_stop():
                 print("early stop...")
                 break

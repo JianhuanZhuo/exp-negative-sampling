@@ -22,7 +22,7 @@ dim: 32
 drop: 0.1
 log_folder: "exps"
 log_tag: "GMF"
-cuda: "3"
+cuda: "0"
 seed: "random"
 evaluator_time: 10
 evaluator_args:
@@ -36,10 +36,10 @@ sample_group_size_neg: 32
 sample_policy: Nmax
 sample_top_size: 32
 sample_ig:
-  enable: False
+  enable: True
   alpha: 0.0
-  post_un_loss: True
-  cache_times: 2
+#  post_un_loss: True
+#  cache_times: 2
 train:
   epoch_tqdm: True
   batch_tqdm: False
@@ -47,7 +47,7 @@ train:
   softw_enable: False
 dataset:
   index_by_user: True
-  noise: True
+  noise: False
   noise_p: 0.15
 DataLoader:
   shuffle: False

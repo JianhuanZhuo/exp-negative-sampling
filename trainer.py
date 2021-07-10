@@ -165,7 +165,8 @@ def main_run(config):
         summary.add_scalar('Epoch/Loss', np.mean(epoch_loss), global_step=epoch)
 
         # 数据记录和精度验证
-        if (epoch + 1) % config['evaluator_time'] == 0:
+        # if (epoch + 1) % config['evaluator_time'] == 0:
+        if epoch % config['evaluator_time'] == 0:
             save_dict = {
                 "model_static_dict": model.state_dict(),
                 "optimizer_state_dict": optimizer.state_dict(),

@@ -13,6 +13,8 @@ _key_:
   dataset/noise: noise
   dataset/noise_p: noiseP
   train/softw_enable: stw
+  sample_ig/enbale: ig
+  sample_ig/alpha: iga
 
 # 在 pipeline 中使用
 model: GMF
@@ -37,7 +39,7 @@ sample_ig:
   enable: True
   alpha: 0.0
   post_un_loss: True
-  cache: 64
+  cache_times: 2
 train:
   epoch_tqdm: True
   batch_tqdm: False

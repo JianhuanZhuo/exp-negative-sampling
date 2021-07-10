@@ -16,10 +16,10 @@ if __name__ == '__main__':
         # "sample_top_size": [32],
         # "drop": [0.1],
         # "train/softw_enable": [True],
-        "sample_ig/alpha": [0.0],
-        "dataset/noise_p": [0, 0.1, 0.20, 0.30],
+        "sample_ig/alpha": [0.0, 0.3, 0.6],
+        # "dataset/noise_p": [0, 0.1, 0.20, 0.30],
         # "dataset/noise": [True, False],
-        "optimizer/weight_decay": [2.4, 4.8, 9.6],  # learning_rate
+        # "optimizer/weight_decay": [2.4, 4.8, 9.6],  # learning_rate
         "optimizer/lr": [0.09, 0.12, 0.3],  # learning_rate
     }
 

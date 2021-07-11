@@ -5,7 +5,7 @@ from trainer import wrap
 from itertools import product
 
 if __name__ == '__main__':
-    gpus = [0, 3, 1, 2] * 4 + [0, 3] * 19
+    gpus = [0, 3, 1, 2] * 6 + [0, 3] * 12
     process_pool = Pool(len(gpus))
     exp_config = config.load_specific_config("config.yaml")
 

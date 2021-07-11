@@ -32,7 +32,7 @@ if __name__ == '__main__':
             print(setting)
             for idx, k in enumerate(grid.keys()):
                 exp_config[k] = setting[idx]
-            exp_config['cuda'] = str(gpus[(r * repeat + i) % len(gpus)])
+            exp_config['cuda'] = str(gpus[task % len(gpus)])
             task += 1
             exp_config['grid_spec/current'] = task
             process_pool.apply_async(wrap, args=(exp_config.clone(),))

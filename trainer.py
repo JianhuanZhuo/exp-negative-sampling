@@ -26,8 +26,8 @@ def wrap(config):
     if "grid_spec" in config:
         total = config.get_or_default("grid_spec/total", -1)
         current = config.get_or_default("grid_spec/current", -1)
-        print(f"grid spec: {current:02}/{total:02}")
-        grid_spec = f"{current:02}/{total:02} "
+        print(f"grid spec: {current:02}/{total:02} on cuda:{config['cuda']}")
+        grid_spec = f"{current:02}/{total:02}/{config['cuda']}="
 
     if 'writer_path' not in config:
         folder = config['log_tag']

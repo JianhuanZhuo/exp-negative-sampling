@@ -46,6 +46,7 @@ class SRNSML1MDataset(Dataset):
         self.ui_loss = torch.ones([self.num_user, self.num_item]) * 100
         self.ui_ig = torch.ones([self.num_user, self.num_item])
         self.ig_alpha = config.get_or_default("sample_ig/alpha", 0.0)
+        self.ig_c = config.get_or_default("sample_ig/c", 0.0001)
 
     def update_un(self, user_raw, negative, un_loss):
         batch_size, negative_size = negative.shape
@@ -56,7 +57,7 @@ class SRNSML1MDataset(Dataset):
             for i, (u, ns, xn_loss) in enumerate(zip(user_raw, negative, un_loss)):
                 xi_loss = self.ui_loss[u][ns.long()]
                 assert xn_loss.shape == xi_loss.shape
-                un_ig = torch.clamp(torch.nan_to_num((xi_loss - xn_loss) / xi_loss), min=-1, max=1)
+                un_ig = torch.clamp((xi_loss - xn_loss) / (xi_loss + self.ig_c), min=-1, max=1)
                 self.ui_ig[u][ns.long()] = self.ig_alpha * self.ui_ig[u][ns.long()] + (1-self.ig_alpha) * un_ig
                 self.ui_loss[u][ns.long()] = xn_loss
                 pass

@@ -4,6 +4,8 @@ _key_:
   pipeline/model:
   pipeline/training_kwargs/use_tqdm_batch: tqb
 
+c: !!float 1e-3
+
 # 在 pipeline 中使用
 pipeline:
   dataset: 'WN18'

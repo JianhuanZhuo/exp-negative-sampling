@@ -56,11 +56,12 @@ class Evaluator:
         self.summary.add_histogram('Analysis/ui_user', dataset.ui_loss.mean(dim=1), global_step=epoch)
         self.summary.add_histogram('Analysis/ui_item', dataset.ui_loss.mean(dim=0), global_step=epoch)
         ig = dataset.ui_ig
-        self.summary.add_scalar('Analysis/ig_mean', (ig != 0.0).float().mean(), global_step=epoch)
         self.summary.add_histogram('Analysis/ig_user', ig.mean(dim=1), global_step=epoch)
         self.summary.add_histogram('Analysis/ig_item', ig.mean(dim=0), global_step=epoch)
         self.summary.add_histogram('Analysis/xig_user', ig, global_step=epoch)
         self.summary.add_histogram('Analysis/xig_item', ig, global_step=epoch)
+        self.summary.add_scalar('Analysis/ig_pos', (ig != 0.0).float().mean(), global_step=epoch)
+        self.summary.add_scalar('Analysis/ig_mean', ig.float().mean(), global_step=epoch)
 
 
 if __name__ == '__main__':

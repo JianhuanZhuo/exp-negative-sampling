@@ -15,6 +15,7 @@ _key_:
   train/softw_enable: stw
   sample_ig/enable: ig
   sample_ig/alpha: iga
+  sample_ig/c: c
 
 # 在 pipeline 中使用
 model: GMF
@@ -38,6 +39,7 @@ sample_top_size: 32
 sample_ig:
   enable: True
   alpha: 0.5
+  c: !!float 1e-3
 #  post_un_loss: True
 #  cache_times: 2
 train:

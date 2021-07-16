@@ -178,9 +178,11 @@ if __name__ == '__main__':
     #
     # a(123, 543, sd=3123)
 
-    print('pipeline' in config)
-    print('pipeline/No' in config)
-    print('pipeline/dataset' in config)
-    print('No/No' in config)
+    # print('pipeline' in config)
+    # print('pipeline/No' in config)
+    # print('pipeline/dataset' in config)
+    # print('No/No' in config)
     # print(config['pipeline/dataset'])
     # print(config['pipeline/No'])
+
+    print(config['c'], type(config['c']))

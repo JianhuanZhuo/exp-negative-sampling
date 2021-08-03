@@ -23,7 +23,7 @@ if __name__ == '__main__':
         "optimizer/lr": [0.09],  # learning_rate
     }
 
-    repeat = 3
+    repeat = 1
     exp_config['log_folder'] = 'grid'
     task = 0
     exp_config['grid_spec/total'] = repeat * len(list(product(*list(grid.values()))))

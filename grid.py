@@ -16,14 +16,14 @@ if __name__ == '__main__':
         # "sample_top_size": [32],
         # "drop": [0.1],
         # "train/softw_enable": [True],
-        "sample_ig/alpha": [0.0, 0.10, 0.20],
+        "sample_ig/alpha": [0.20],
         # "dataset/noise_p": [0, 0.1, 0.20, 0.30],
         # "dataset/noise": [True, False],
-        "optimizer/weight_decay": [1.2, 2.4, 4.8],  # learning_rate
-        "optimizer/lr": [0.04, 0.09, 0.12],  # learning_rate
+        "optimizer/weight_decay": [4.8],  # learning_rate
+        "optimizer/lr": [0.09],  # learning_rate
     }
 
-    repeat = 2
+    repeat = 1
     exp_config['log_folder'] = 'grid'
     task = 0
     exp_config['grid_spec/total'] = repeat * len(list(product(*list(grid.values()))))
@@ -36,7 +36,7 @@ if __name__ == '__main__':
             task += 1
             exp_config['grid_spec/current'] = task
             process_pool.apply_async(wrap, args=(exp_config.clone(),))
-        exp_config.random_again()
+        # exp_config.random_again()
 
     process_pool.close()
     process_pool.join()

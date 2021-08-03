@@ -23,7 +23,7 @@ drop: 0.1
 log_folder: "exps"
 log_tag: "GMF"
 cuda: "0"
-seed: "random"
+seed: 15
 evaluator_time: 10
 evaluator_args:
   stop_delay: 300

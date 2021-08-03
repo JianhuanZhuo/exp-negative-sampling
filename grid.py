@@ -17,7 +17,7 @@ if __name__ == '__main__':
         # "drop": [0.1],
         # "train/softw_enable": [True],
         "sample_ig/alpha": [0.20],
-        # "dataset/noise_p": [0, 0.1, 0.20, 0.30],
+        "dataset/noise_p": [0, 0.05, 0.1, 0.15, 0.20, 0.25, 0.30],
         # "dataset/noise": [True, False],
         "optimizer/weight_decay": [4.8],  # learning_rate
         "optimizer/lr": [0.09],  # learning_rate

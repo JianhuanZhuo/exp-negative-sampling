@@ -47,7 +47,7 @@ train:
   softw_enable: False
 dataset:
   index_by_user: True
-  noise: False
+  noise: True
   noise_p: 0.15
 DataLoader:
   shuffle: False
